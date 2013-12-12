@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>The Book of Genesis : Chapter 1</title>
+<style>
+
+
+</style>
+</head>
+<body>
+
+	<script>
+
+	// I've commented lines that should be inherited
+	var Void = function() {
+		this.name = "Void";
+		this.day = 0;
+	}
+	var Light = function() {
+		this.name = "Light";
+		this.day = 1;
+		this.touchable = null;
+		this.alive = false;
+		this.substance = "quantum";
+		this.primaryElement = "Energy";
+		this.doing = function() {
+			console.log("Energy of all");
+		}
+		this.theVoiceOfGod = function() {
+			console.log("And God said, Let there be light: and there was light.");
+		}
+	}
+	var Firmanent = function() {
+		this.name = "Firmanent";
+		this.day = 2;
+		//this.touchable = null;
+		//this.alive = false;
+		//this.primaryElement = "Energy";
+		this.substance = "aerial";
+		this.doing = function() {
+			console.log("Gives breathe");
+		}
+		this.theVoiceOfGod = "";
+	}
+	var Land = function() {
+		this.name = "Land";
+		this.day = 3;
+		this.touchable = "cold";
+		//this.alive = false;
+		//this.primaryElement = "Energy";
+		this.substance = "solid";
+		this.doing = function() {
+			console.log("Bring plants");
+		}
+		this.theVoiceOfGod = function() {
+			console.log("Let the waters under the heaven be gathered together unto one place, and let the dry land appear.");
+		}
+	}
+	var Sun = function() {
+		this.name = "Sun";
+		this.day = 4;
+		this.touchable = null;
+		//this.alive = false;
+		//this.substance = "solid";
+		//this.primaryElement = "Energy";
+		this.doing = function() {
+			console.log("Gives life");
+		}
+		this.theVoiceOfGod = function() {
+			console.log("Let there be lights in the firmament of the heaven to divide the day from the night.");
+		}
+	}
+	var Animal = function() {
+		this.name = "Animal";
+		this.day = 5;
+		this.touchable = "soft";
+		this.alive = true;
+		this.substance = "organic";
+		this.primaryElement = "Spirit";
+		this.doing = function() {
+			console.log("Crawls, swims and flies all around the world");
+		}
+		this.theVoiceOfGod = function() {
+			console.log("Let the waters bring forth abundantly the moving creature that hath life, and fowl that may fly above the earth in the open firmament of heaven.");
+		}
+	}
+	var Man = function() {
+		this.name = "Man";
+		this.day = 6;
+		//this.touchable = "soft";
+		//this.alive = true;
+		//this.substance = "organic";
+		this.primaryElement = "Soul";
+		this.doing = function() {
+			console.log("Multiplying, and replenishing the earth");
+		}
+		this.theVoiceOfGod = function() {
+			console.log("Let us make man in our image, after our likeness.");
+		}
+	}
+
+	var World = {
+		kinds: [Void],									// 1 KIND: 		"And the earth was without form, and VOID; and darkness was upon the face of the deep."
+		creations: [],									// 0 CREATIONS: "And the Spirit of God moved upon the face of the waters.
+		GodMade: function(Child, Parent) { 
+			var actOfCreation = function() {};			// temp constructor
+			actOfCreation.prototype = Parent.prototype; 
+			Child.prototype = new actOfCreation();
+			Child.uber = Parent.prototype; 				// setting of superclass
+			Child.prototype.constructor = Child; 		// restoring constructor pointer
+
+			var tempChildName = (new Child).name;		// what is the name of new creation?
+			var add = true;
+			for (var i = 0; i < this.kinds.length; i++) {
+				//console.log( (new World.kinds[i]).name )
+				if ( tempChildName == (new World.kinds[i]).name ) {
+					add = false;						// not add creation to kinds if kind with the same name already exist
+				}
+			};
+			if (add) {
+				this.kinds.push(Child);					// add new creation 					
+			}
+		},
+		populate: function(quantity) {
+			var singleCreature;
+			var randomKind;
+			for (var i = 0; i < quantity; i++) {
+				randomKind = Math.floor( Math.random()*this.kinds.length ); // N of the kind in array
+				singleCreature = new this.kinds[randomKind];				// creating each time single object
+				this.creations.push(singleCreature);						// filling array World.creations with objects
+			}
+		}
+	}
+
+	// Void -> Light -> Firmanent -> Land -> Sun -> Animal -> Man
+	World.GodMade(Light,Void);
+	World.GodMade(Firmanent,Light);
+	World.GodMade(Land,Firmanent);
+	World.GodMade(Land,Firmanent);
+	World.GodMade(Sun,Land);
+	World.GodMade(Animal,Sun);
+	World.GodMade(Man,Animal);
+
+	World.populate(1000);
+
+	// And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day.
+
+
+
+	</script>
+</body>
+</html>
