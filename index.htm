@@ -3,15 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <title>The Book of Genesis : Chapter 1</title>
-<style>
-
-
-</style>
+	<!-- just for fun - jQuery progressbars -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="jquery-ui-1.10.3.custom.min.js"></script>
+	<link rel="stylesheet" href="jquery-ui-1.10.3.custom.min.css">
+	<style>
+	.ui-progressbar {
+		margin: 8px 10%;
+	}
+	.ui-progressbar .t {
+		height: 100%;
+		text-align: right;
+		line-height: 22px;
+		position: absolute;
+		padding: 5px 10px;
+	}
+	</style>
 </head>
 <body>
+	<div id="Void">		<div class="t"></div></div>
+	<div id="Light">	<div class="t"></div></div>
+	<div id="Firmanent"><div class="t"></div></div>
+	<div id="Land">		<div class="t"></div></div>
+	<div id="Sun">		<div class="t"></div></div>
+	<div id="Animal">	<div class="t"></div></div>
+	<div id="Man">		<div class="t"></div></div>
 
 	<script>
-
 	// I've commented lines that should be inherited
 	var Void = function() {
 		this.name = "Void";
@@ -103,23 +121,30 @@
 	var World = {
 		kinds: [Void],									// 1 KIND: 		"And the earth was without form, and VOID; and darkness was upon the face of the deep."
 		creations: [],									// 0 CREATIONS: "And the Spirit of God moved upon the face of the waters.
-		GodMade: function(Child, Parent) { 
-			var actOfCreation = function() {};			// temp constructor
-			actOfCreation.prototype = Parent.prototype; 
-			Child.prototype = new actOfCreation();
-			Child.uber = Parent.prototype; 				// setting of superclass
-			Child.prototype.constructor = Child; 		// restoring constructor pointer
+		GodMade: function(Child, Parent) {
 
+			// N5 - Temporary constructor - not usable here because we loose uber
+			// var actOfCreation = function() {};			// temp constructor
+			// actOfCreation.prototype = Parent.prototype; 
+			// Child.prototype = new actOfCreation();
+			// Child.uber = Parent.prototype; 				// setting of superclass
+			// Child.prototype.constructor = Child; 		// restoring constructor pointer
+
+			// N4 - Prototype reuse
+			//Child.prototype = Parent.prototype;
+
+			Child.prototype = new Parent();
+
+			// adding new kind
 			var tempChildName = (new Child).name;		// what is the name of new creation?
 			var add = true;
 			for (var i = 0; i < this.kinds.length; i++) {
-				//console.log( (new World.kinds[i]).name )
 				if ( tempChildName == (new World.kinds[i]).name ) {
 					add = false;						// not add creation to kinds if kind with the same name already exist
 				}
 			};
 			if (add) {
-				this.kinds.push(Child);					// add new creation 					
+				this.kinds.push(Child);					// add new kind of creation 					
 			}
 		},
 		populate: function(quantity) {
@@ -146,7 +171,32 @@
 
 	// And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day.
 
+	var createdFrom = []; // temp array for all names
 
+	for (var i = 0; i < World.creations.length; i++) {
+		var thisCreation = World.creations[i];
+		while (thisCreation.name) { 						// while it have name
+			createdFrom.push(thisCreation.name);			// add name to storage
+			//thisCreation = thisCreation.constructor.uber;
+			thisCreation = thisCreation.__proto__;			// and switch to parent
+		}
+		
+	}
+
+	var count = {};
+	for (var i = 0; i < createdFrom.length; i++) {
+		//console.log(createdFrom[i])
+		if (!count[createdFrom[i]]) {
+			count[createdFrom[i]] = 0; 	// for first appear set it to 0
+		}
+		count[createdFrom[i]]++; 		// increase each array element 
+
+		// just for fun - jQuery progressbars
+		$( "#" + createdFrom[i] ).progressbar({
+			value: count[createdFrom[i]]/10
+		}).find(".t").text(count[createdFrom[i]] + " creatures with " + createdFrom[i] + " inside ");
+
+	}
 
 	</script>
 </body>
